@@ -10,21 +10,46 @@ const WebCamera = () => {
     setImgSrc(imageSrc);
   }, [webcameraRef]);
 
+  const retake = () => {
+    setImgSrc(null);
+  };
+
   return (
     <div className="container">
       {imgSrc ? (
         <img src={imgSrc} alt="webcam" />
       ) : (
-        <Webcam height={300} width={300} ref={webcameraRef} />
+        <Webcam
+          height={300}
+          width={300}
+          ref={webcameraRef}
+          screenshotFormat="image/png"
+        />
       )}
       <div className="btn-container">
-        <button
-          className="text-white bg-black p-3 rounded-md"
-          onClick={capture}
-        >
-          Capture photo
-        </button>
+        {imgSrc ? (
+          <button
+            className="text-white bg-black p-3 rounded-md"
+            onClick={retake}
+          >
+            Retake photo
+          </button>
+        ) : (
+          <button
+            className="text-white bg-black p-3 rounded-md"
+            onClick={capture}
+          >
+            Capture photo
+          </button>
+        )}
       </div>
+      {imgSrc && (
+        <button className="text-white bg-black p-3 rounded-md">
+          <a href={imgSrc} download="photo.jpg">
+            Download photo
+          </a>
+        </button>
+      )}
     </div>
   );
 };
