@@ -1,5 +1,5 @@
 import Webcamera from "../component/WebCamera";
-import "./App.css";
+import "../App.css";
 
 const Booth = () => {
   return (
