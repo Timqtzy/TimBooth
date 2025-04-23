@@ -18,7 +18,12 @@ const WebCamera = () => {
         <Webcam height={300} width={300} ref={webcameraRef} />
       )}
       <div className="btn-container">
-        <button onClick={capture}>Capture photo</button>
+        <button
+          className="text-white bg-black p-3 rounded-md"
+          onClick={capture}
+        >
+          Capture photo
+        </button>
       </div>
     </div>
   );
