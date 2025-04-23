@@ -1,13 +1,25 @@
 import Webcam from "react-webcam";
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 
 const WebCamera = () => {
   const webcameraRef = useRef(null);
   const [imgSrc, setImgSrc] = useState(null);
 
+  const capture = useCallback(() => {
+    const imageSrc = webcameraRef.current.getScreenshot();
+    setImgSrc(imageSrc);
+  }, [webcameraRef]);
+
   return (
     <div className="container">
-      <Webcam height={600} width={600} ref={webcameraRef} />
+      {imgSrc ? (
+        <img src={imgSrc} alt="webcam" />
+      ) : (
+        <Webcam height={300} width={300} ref={webcameraRef} />
+      )}
+      <div className="btn-container">
+        <button onClick={capture}>Capture photo</button>
+      </div>
     </div>
   );
 };

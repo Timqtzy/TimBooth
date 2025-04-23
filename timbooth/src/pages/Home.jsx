@@ -24,7 +24,7 @@ const Home = () => {
             for fun!
           </p>
           <button
-            className="flex bg-black p-3 rounded-md gap-2"
+            className="flex text-white bg-black p-3 rounded-md gap-2"
             onClick={() => navigate("/booth")}
           >
             {<Camera className="text-white" />} Take a photo
