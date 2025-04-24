@@ -1,16 +1,23 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const Navbar = () => {
   const navigate = useNavigate();
-
+  const { loginWithRedirect } = useAuth0();
+  const { logout } = useAuth0();
+  const { isAuthenticated } = useAuth0();
   return (
     <div>
-      <div className="navbar bg-black shadow-sm rounded-xl px-4">
+      <div className="navbar bg-white text-black shadow-sm rounded-xl px-4">
         <div className="navbar-start">
           <div className="dropdown">
-            <div tabIndex={0} role="button" className="  lg:hidden mr-4">
+            <div
+              tabIndex={0}
+              role="button"
+              className="font-medium  bg-white text-black lg:hidden mr-4"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5"
@@ -29,31 +36,52 @@ const Navbar = () => {
             </div>
             <ul
               tabIndex={0}
-              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
+              className="menu menu-sm dropdown-content bg-white text-black font-medium rounded-box z-1 mt-3 w-52 p-2 shadow"
             >
               <li>
                 <a onClick={() => navigate("/")}>Home</a>
               </li>
-
+              {/* <li>
+                <a onClick={() => navigate("/profile")}>Profile</a>
+              </li> */}
               <li>
                 <a onClick={() => navigate("/about")}>About</a>
               </li>
             </ul>
           </div>
-          <a className="text-xl text-white font-bold">Lubooth</a>
+          <a className="text-xl text-black font-bold">Lubooth</a>
         </div>
-        <div className="navbar-center hidden lg:flex">
+        <div className="navbar-center hidden lg:flex font-medium">
           <ul className="menu menu-horizontal px-1">
             <li>
               <a onClick={() => navigate("/")}>Home</a>
             </li>
+            {/* <li>
+              <a onClick={() => navigate("/profile")}>Profile</a>
+            </li> */}
             <li>
               <a onClick={() => navigate("/about")}>About</a>
             </li>
           </ul>
         </div>
         <div className="navbar-end">
-          <a className="btn bg-white text-black">Login</a>
+          {!isAuthenticated ? (
+            <button
+              className="px-4 py-2 rounded-md bg-[#9679F0] text-white"
+              onClick={() => loginWithRedirect()}
+            >
+              Login
+            </button>
+          ) : (
+            <button
+              className="px-4 py-2 rounded-md bg-[#9679F0] text-white"
+              onClick={() =>
+                logout({ logoutParams: { returnTo: window.location.origin } })
+              }
+            >
+              Logout
+            </button>
+          )}
         </div>
       </div>
     </div>
