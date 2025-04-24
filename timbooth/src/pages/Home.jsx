@@ -8,7 +8,7 @@ const Home = () => {
 
   return (
     <div className="relative min-h-screen flex flex-col">
-      <div className="fixed top-2 left-0 right-0 flex justify-center px-4">
+      <div className="sticky top-2 left-0 right-0 flex justify-center px-4">
         <section className="w-full max-w-screen-lg">
           <Navbar />
         </section>
@@ -24,7 +24,7 @@ const Home = () => {
             for fun!
           </p>
           <button
-            className="flex text-white bg-black p-3 rounded-md gap-2"
+            className="flex text-white bg-black p-3 rounded-md gap-2 cursor-pointer"
             onClick={() => navigate("/booth")}
           >
             {<Camera className="text-white" />} Take a photo
