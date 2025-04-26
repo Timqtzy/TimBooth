@@ -27,8 +27,8 @@ const PhotoBooth = () => {
         const stream = await navigator.mediaDevices.getUserMedia({
           video: {
             facingMode: settings.facingMode,
-            width: { ideal: 1920 },
-            height: { ideal: 1080 },
+            width: { ideal: 640 },
+            height: { ideal: 480 },
           },
         });
         if (videoRef.current) {
@@ -172,7 +172,7 @@ const PhotoBooth = () => {
               ref={videoRef}
               autoPlay
               playsInline
-              className="w-full h-fit rounded shadow scale-x-[-1]"
+              className="w-80  h-[480px] sm:w-full sm:h-fit rounded shadow scale-x-[-1]"
             />
             {countdown && (
               <div className="absolute inset-0 flex items-center justify-center text-6xl font-bold text-red-600">
