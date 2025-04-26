@@ -79,33 +79,18 @@ const PhotoBooth = () => {
     const ctx = canvas.getContext("2d");
     ctx.save();
 
-    if (settings.facingMode === "user") {
-      // Flip horizontally for front camera
-      ctx.scale(-1, 1);
-      ctx.drawImage(
-        video,
-        sourceX,
-        sourceY,
-        sourceWidth,
-        sourceHeight,
-        -displayWidth,
-        0,
-        displayWidth,
-        displayHeight
-      );
-    } else {
-      ctx.drawImage(
-        video,
-        sourceX,
-        sourceY,
-        sourceWidth,
-        sourceHeight,
-        0,
-        0,
-        displayWidth,
-        displayHeight
-      );
-    }
+    ctx.scale(-1, 1);
+    ctx.drawImage(
+      video,
+      sourceX,
+      sourceY,
+      sourceWidth,
+      sourceHeight,
+      -displayWidth,
+      0,
+      displayWidth,
+      displayHeight
+    );
 
     ctx.restore();
 
