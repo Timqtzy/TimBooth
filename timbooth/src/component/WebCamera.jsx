@@ -48,17 +48,65 @@ const PhotoBooth = () => {
     const canvas = canvasRef.current;
     if (!video || !canvas) return;
 
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
+    // Container aspect ratio (4:3)
+    const containerAspect = 4 / 3;
+    const videoIntrinsicAspect = video.videoWidth / video.videoHeight;
+
+    let sourceX, sourceY, sourceWidth, sourceHeight;
+
+    if (videoIntrinsicAspect > containerAspect) {
+      // Video is wider than container: crop width
+      sourceHeight = video.videoHeight;
+      sourceWidth = sourceHeight * containerAspect;
+      sourceX = (video.videoWidth - sourceWidth) / 2;
+      sourceY = 0;
+    } else {
+      // Video is taller than container: crop height
+      sourceWidth = video.videoWidth;
+      sourceHeight = sourceWidth / containerAspect;
+      sourceX = 0;
+      sourceY = (video.videoHeight - sourceHeight) / 2;
+    }
+
+    // Get displayed dimensions of the video element
+    const displayWidth = video.clientWidth;
+    const displayHeight = video.clientHeight;
+
+    // Set canvas dimensions to match displayed size
+    canvas.width = displayWidth;
+    canvas.height = displayHeight;
 
     const ctx = canvas.getContext("2d");
     ctx.save();
+
     if (settings.facingMode === "user") {
+      // Flip horizontally for front camera
       ctx.scale(-1, 1);
-      ctx.drawImage(video, -canvas.width, 0, canvas.width, canvas.height);
+      ctx.drawImage(
+        video,
+        sourceX,
+        sourceY,
+        sourceWidth,
+        sourceHeight,
+        -displayWidth,
+        0,
+        displayWidth,
+        displayHeight
+      );
     } else {
-      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      ctx.drawImage(
+        video,
+        sourceX,
+        sourceY,
+        sourceWidth,
+        sourceHeight,
+        0,
+        0,
+        displayWidth,
+        displayHeight
+      );
     }
+
     ctx.restore();
 
     const dataUrl = canvas.toDataURL("image/png");
