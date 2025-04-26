@@ -27,8 +27,8 @@ const PhotoBooth = () => {
         const stream = await navigator.mediaDevices.getUserMedia({
           video: {
             facingMode: settings.facingMode,
-            width: { ideal: 640 },
-            height: { ideal: 480 },
+            width: { ideal: 1920 },
+            height: { ideal: 1080 },
           },
         });
         if (videoRef.current) {
@@ -108,6 +108,7 @@ const PhotoBooth = () => {
     const gap = 10;
     const photoHeight =
       (400 - padding * 2 - gap * (photos.length - 1)) / photos.length;
+
     const textAreaHeight = 60;
 
     canvas.width = width;
@@ -260,12 +261,14 @@ const PhotoBooth = () => {
               />
             ))}
           </div>
-          <button
-            className="mt-4 bg-black text-white px-4 py-2 rounded"
-            onClick={() => setShowStyling(true)}
-          >
-            Next
-          </button>
+          {photos.length === settings.totalPhotos && (
+            <button
+              className="mt-4 bg-black text-white px-4 py-2 rounded"
+              onClick={() => setShowStyling(true)}
+            >
+              Next
+            </button>
+          )}
         </div>
       )}
 
