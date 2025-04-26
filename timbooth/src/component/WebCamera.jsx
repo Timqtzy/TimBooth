@@ -151,20 +151,21 @@ const PhotoBooth = () => {
     const canvas = finalCanvasRef.current;
     const ctx = canvas.getContext("2d");
 
-    const width = 320;
+    // Final canvas configuration
+    const targetWidth = 320;
     const padding = 20;
     const gap = 10;
-    const photoHeight =
-      (400 - padding * 2 - gap * (photos.length - 1)) / photos.length;
-
     const textAreaHeight = 60;
 
-    canvas.width = width;
-    canvas.height =
-      padding * 2 +
-      photoHeight * photos.length +
-      gap * (photos.length - 1) +
-      textAreaHeight;
+    // Calculate photo dimensions based on 4:3 aspect ratio
+    const photoDisplayWidth = targetWidth - padding * 2;
+    const photoDisplayHeight = (photoDisplayWidth * 3) / 4; // Maintain 4:3 aspect ratio
+
+    // Calculate total canvas height
+    const totalPhotosHeight =
+      photoDisplayHeight * photos.length + gap * (photos.length - 1);
+    canvas.width = targetWidth;
+    canvas.height = padding * 2 + totalPhotosHeight + textAreaHeight;
 
     ctx.fillStyle = bgColor;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -180,13 +181,35 @@ const PhotoBooth = () => {
 
     Promise.all(images).then((loadedImages) => {
       loadedImages.forEach((img, idx) => {
-        const y = padding + idx * (photoHeight + gap);
+        const y = padding + idx * (photoDisplayHeight + gap);
+
+        // Create temporary canvas to handle image scaling
+        const tempCanvas = document.createElement("canvas");
+        const tempCtx = tempCanvas.getContext("2d");
+
+        // Set temp canvas to original captured dimensions
+        tempCanvas.width = img.width;
+        tempCanvas.height = img.height;
+        tempCtx.drawImage(img, 0, 0);
+
         ctx.save();
         ctx.filter = selectedFilter;
-        ctx.drawImage(img, padding, y, width - padding * 2, photoHeight);
+        // Draw scaled image maintaining aspect ratio
+        ctx.drawImage(
+          tempCanvas,
+          0,
+          0,
+          img.width,
+          img.height, // Source dimensions
+          padding,
+          y, // Destination position
+          photoDisplayWidth,
+          photoDisplayHeight // Destination dimensions
+        );
         ctx.restore();
       });
 
+      // Text rendering remains the same
       ctx.fillStyle = "black";
       ctx.font = "16px sans-serif";
       ctx.textAlign = "center";
@@ -194,13 +217,17 @@ const PhotoBooth = () => {
       if (customText) {
         ctx.fillText(
           customText,
-          width / 2,
+          targetWidth / 2,
           canvas.height - textAreaHeight + 25
         );
       }
       if (addDate) {
         const date = new Date().toLocaleDateString();
-        ctx.fillText(date, width / 2, canvas.height - textAreaHeight + 45);
+        ctx.fillText(
+          date,
+          targetWidth / 2,
+          canvas.height - textAreaHeight + 45
+        );
       }
     });
   };
