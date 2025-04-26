@@ -11,8 +11,8 @@ const Booth = () => {
         </section>
       </div>
 
-      <div className="flex-grow flex justify-center items-center">
-        <section className="flex flex-col justify-center items-center px-4">
+      <div className=" flex-1 flex justify-center items-center py-12">
+        <section className="flex justify-center items-center max-w-screen-lg w-full">
           <Webcamera />
         </section>
       </div>

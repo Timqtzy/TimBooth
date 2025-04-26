@@ -1,1 +1,45 @@
+.photo-booth {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
 
+video {
+  width: 100%;
+  max-width: 600px;
+  margin: 20px 0;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.photo-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 20px;
+  margin: 20px 0;
+}
+
+.photo-container img {
+  width: 100%;
+  max-width: 300px;
+}
+
+.styling-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.date,
+.custom-text {
+  width: 100%;
+  text-align: center;
+  padding: 10px;
+}
