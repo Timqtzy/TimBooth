@@ -236,7 +236,9 @@ const PhotoBooth = () => {
               ref={videoRef}
               autoPlay
               playsInline
-              className="absolute w-full h-full border border-muted rounded object-cover scale-x-[-1]"
+              className={`absolute w-full h-full border border-muted rounded object-cover ${
+                settings.facingMode === "user" ? "scale-x-[-1]" : ""
+              }`}
             />
             {countdown && (
               <div className="absolute inset-0 flex items-center justify-center text-6xl font-bold text-red-600">
