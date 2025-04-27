@@ -11,6 +11,7 @@ const PhotoBooth = () => {
   const [showStyling, setShowStyling] = useState(false);
 
   const [bgColor, setBgColor] = useState("#ffffff");
+  const [textColor, setTextColor] = useState("#ffffff");
   const [customText, setCustomText] = useState("");
   const [addDate, setAddDate] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState("none");
@@ -79,18 +80,33 @@ const PhotoBooth = () => {
     const ctx = canvas.getContext("2d");
     ctx.save();
 
-    ctx.scale(-1, 1);
-    ctx.drawImage(
-      video,
-      sourceX,
-      sourceY,
-      sourceWidth,
-      sourceHeight,
-      -displayWidth,
-      0,
-      displayWidth,
-      displayHeight
-    );
+    if (settings.facingMode === "user") {
+      // Flip horizontally for front camera
+      ctx.scale(-1, 1);
+      ctx.drawImage(
+        video,
+        sourceX,
+        sourceY,
+        sourceWidth,
+        sourceHeight,
+        -displayWidth,
+        0,
+        displayWidth,
+        displayHeight
+      );
+    } else {
+      ctx.drawImage(
+        video,
+        sourceX,
+        sourceY,
+        sourceWidth,
+        sourceHeight,
+        0,
+        0,
+        displayWidth,
+        displayHeight
+      );
+    }
 
     ctx.restore();
 
@@ -152,6 +168,12 @@ const PhotoBooth = () => {
     canvas.width = targetWidth;
     canvas.height = padding * 2 + totalPhotosHeight + textAreaHeight;
 
+    // Add this at the start of drawFinalCanvas
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = targetWidth * dpr;
+    canvas.height = (padding * 2 + totalPhotosHeight + textAreaHeight) * dpr;
+    ctx.scale(dpr, dpr);
+
     ctx.fillStyle = bgColor;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -194,10 +216,12 @@ const PhotoBooth = () => {
         ctx.restore();
       });
 
-      // Text rendering remains the same
-      ctx.fillStyle = "black";
-      ctx.font = "16px sans-serif";
-      ctx.textAlign = "center";
+      if (customText || addDate) {
+        // Text rendering remains the same
+        ctx.fillStyle = textColor;
+        ctx.font = "16px sans-serif";
+        ctx.textAlign = "center";
+      }
 
       if (customText) {
         ctx.fillText(
@@ -221,7 +245,15 @@ const PhotoBooth = () => {
     if (showStyling && photos.length > 0) {
       drawFinalCanvas();
     }
-  }, [showStyling, photos, customText, addDate, bgColor, selectedFilter]);
+  }, [
+    showStyling,
+    photos,
+    customText,
+    addDate,
+    bgColor,
+    selectedFilter,
+    textColor,
+  ]);
 
   return (
     <div className="flex flex-col md:grid md:grid-cols-2 items-center md:items-start gap-4 px-4 text-black">
@@ -232,7 +264,9 @@ const PhotoBooth = () => {
               ref={videoRef}
               autoPlay
               playsInline
-              className=" absolute w-full h-full border border-muted rounded object-cover scale-x-[-1]"
+              className={`absolute w-full h-full border border-muted rounded object-cover scale-x-[-1] ${
+                settings.facingMode === "user" ? "scale-x-[-1]" : ""
+              }`}
             />
             {countdown && (
               <div className="absolute inset-0 flex items-center justify-center text-6xl font-bold text-red-600">
@@ -373,6 +407,16 @@ const PhotoBooth = () => {
               type="color"
               value={bgColor}
               onChange={(e) => setBgColor(e.target.value)}
+              className="h-10 w-full"
+            />
+          </label>
+
+          <label className="flex flex-col gap-1">
+            Text color:
+            <input
+              type="color"
+              value={textColor}
+              onChange={(e) => setTextColor(e.target.value)}
               className="h-10 w-full"
             />
           </label>
